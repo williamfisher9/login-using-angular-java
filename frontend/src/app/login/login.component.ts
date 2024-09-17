@@ -9,29 +9,45 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
   styleUrl: './login.component.css',
 })
 export class LoginComponent {
-  handleBlur() {
-    console.log(this.usernameInput);
+  errors = {
+    emailAddress: { hasErrors: false, message: [''] },
+    password: { hasErrors: false, message: [''] }
+  };
+
+  showPassword : boolean = false;
+
+  controlPasswordVisibility() {
+    this.showPassword = !this.showPassword;
   }
 
-  handleFocus(field: string) {
-    if (field === 'input') {
-      this.usernameInput.nativeElement.style.transform = 'translate(-126px, -30px)';
-      this.usernameInput.nativeElement.style.scale = '0.6';
-    } else {
-      this.passwordInput.nativeElement.style.transform = 'translate(-126px, -30px)';
-      this.passwordInput.nativeElement.style.scale = '0.6';
-    }
-  }
-  @ViewChild('usernameLabel') usernameInput!: ElementRef;
-  @ViewChild('passwordLabel') passwordInput!: ElementRef;
-
-  applyForm = new FormGroup({
-    username: new FormControl(''),
+  loginForm = new FormGroup({
+    emailAddress: new FormControl(''),
     password: new FormControl(''),
   });
 
-  handleFormSubmit() {
-    console.log(this.applyForm.value.username);
-    console.log(this.applyForm.value.password);
+  handleRegisterForm() {
+    this.errors = {
+      emailAddress: { hasErrors: false, message: [''] },
+      password: { hasErrors: false, message: [''] }
+    };
+
+    let hasErrors = false;
+
+    if(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.loginForm.value.emailAddress!.trim()) === false) {
+      this.errors.emailAddress.message.push('Incorrect email address regex');
+      hasErrors = true;
+    }
+
+    if (/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@.#$!%*?&^])[A-Za-z\d@.#$!%*?&]{8,15}$/.test(this.loginForm.value.password!.trim()) === false) {
+      this.errors.password.message.push('Incorrect password regex');
+      hasErrors = true;
+    }
+
+    if(hasErrors){
+      console.log("errors exist")
+    } else {
+      console.log("send login request to the server")
+    }
+
   }
 }

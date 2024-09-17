@@ -1,15 +1,32 @@
-<div class="login-container">
-    <form [formGroup]="applyForm" (submit)="handleFormSubmit()" class="fields-container">
-        <div class="input-field-container">
-            <input class="input" type="text" name="username" id="usernmae" autocomplete="off" formControlName="username" (focus)="handleFocus('input')" (blur)="handleBlur()"/>
-            <label #usernameLabel for="username" class="placeholder">Username</label>
+<form class="login-container" (submit)="handleRegisterForm()" [formGroup]="loginForm">
+    <div class="form-fields-wrapper">
+
+        <div class="form-field">
+            <input class="input-field" type="text" id="emailAddress" name="emailAddress" autocomplete="off" formControlName="emailAddress"/>
+            <label class="label-field" for="emailAddress">Email Address</label>
+            <label class="error-field" for="emailAddress">
+                @if (errors.emailAddress.message) {
+                    @for (item of errors.emailAddress.message; track $index) {
+                        {{item}}
+                    }
+                }
+            </label>
         </div>
 
-        <div class="input-field-container">
-            <input class="input" type="password" name="password" id="password" formControlName="password" (focus)="handleFocus('password')" (blur)="handleBlur()"/>
-            <label #passwordLabel for="password" class="placeholder">Password</label>
+        <div class="form-field">
+            <input #passwordField class="input-field" type='{{showPassword ? "text" : "password"}}' id="password" name="password" autocomplete="off" formControlName="password"/>
+            <label class="label-field" for="password">Password</label>
+            <label class="error-field" for="password">
+                @if (errors.password.message) {
+                    @for (item of errors.password.message; track $index) {
+                        {{item}}
+                    }
+                }
+            </label>
+            <i class="icon fa-solid {{showPassword ? 'fa-eye-slash' : 'fa-eye'}}" (click)="controlPasswordVisibility()"></i>
         </div>
 
-        <input type="submit" value="SUBMIT" />
-    </form>
-</div>
+        <input type="submit" value="submit" />
+
+    </div>
+</form>
