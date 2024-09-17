@@ -1,0 +1,69 @@
+<form class="register-container" (submit)="handleRegisterForm()" [formGroup]="registerForm">
+    <div class="form-fields-wrapper">
+
+        <div class="form-field">
+            <input class="input-field" type="text" id="firstName" name="firstName" autocomplete="off" formControlName="firstName"/>
+            <label class="label-field" for="firstName">First Name</label>
+            <label class="error-field" for="firstName">
+                @if (errors.firstName.message) {
+                    @for (item of errors.firstName.message; track $index) {
+                        {{item}}
+                    }
+                }
+            </label>
+        </div>
+
+        <div class="form-field">
+            <input class="input-field" type="text" id="lastName" name="lastName" autocomplete="off" formControlName="lastName"/>
+            <label class="label-field" for="lastName">Last Name</label>
+            <label class="error-field" for="lastName">
+                @if (errors.lastName.message) {
+                    @for (item of errors.lastName.message; track $index) {
+                        {{item}}
+                    }
+                }
+            </label>
+        </div>
+
+        <div class="form-field">
+            <input class="input-field" type="text" id="emailAddress" name="emailAddress" autocomplete="off" formControlName="emailAddress"/>
+            <label class="label-field" for="emailAddress">Email Address</label>
+            <label class="error-field" for="emailAddress">
+                @if (errors.emailAddress.message) {
+                    @for (item of errors.emailAddress.message; track $index) {
+                        {{item}}
+                    }
+                }
+            </label>
+        </div>
+
+        <div class="form-field">
+            <input #passwordField class="input-field" type='{{showPassword ? "text" : "password"}}' id="password" name="password" autocomplete="off" formControlName="password"/>
+            <label class="label-field" for="password">Password</label>
+            <label class="error-field" for="password">
+                @if (errors.password.message) {
+                    @for (item of errors.password.message; track $index) {
+                        {{item}}
+                    }
+                }
+            </label>
+            <i class="icon fa-solid {{showPassword ? 'fa-eye-slash' : 'fa-eye'}}" (click)="controlPasswordVisibility()"></i>
+        </div>
+
+        <div class="form-field">
+            <input #confirmPasswordField class="input-field" type='{{showConfirmPassword ? "text" : "password"}}' id="confirmPassword" name="confirmPassword" autocomplete="off" formControlName="confirmPassword"/>
+            <label class="label-field" for="confirmPassword">Confirm Password</label>
+            <label class="error-field" for="confirmPassword">
+                @if (errors.confirmPassword.message) {
+                    @for (item of errors.confirmPassword.message; track $index) {
+                        {{item}}
+                    }
+                }
+            </label>
+            <i class="icon fa-solid {{showConfirmPassword ? 'fa-eye-slash' : 'fa-eye'}}" (click)="controlConfirmPasswordVisibility()"></i>
+        </div>
+
+        <input type="submit" value="submit" />
+
+    </div>
+</form>
