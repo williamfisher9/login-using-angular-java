@@ -1,5 +1,7 @@
 import {Component, ElementRef, ViewChild} from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { User } from '../model/user';
+import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-login',
@@ -47,7 +49,17 @@ export class LoginComponent {
       console.log("errors exist")
     } else {
       console.log("send login request to the server")
+
+      //this.service.getUsers().subscribe(data => {this.users = data, console.log(data)});
+      this.service.authenticateUser({emailAddress: this.loginForm.value.emailAddress!, password: this.loginForm.value.password!})
     }
 
+
   }
+
+  users : User[] = [];
+
+  constructor(private service : UserService) { }
+
+
 }
