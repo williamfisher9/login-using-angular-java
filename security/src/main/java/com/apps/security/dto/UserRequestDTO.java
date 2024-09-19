@@ -1,6 +1,9 @@
 package com.apps.security.dto;
 
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+
+import java.util.Set;
 
 public class UserRequestDTO {
     @NotEmpty(message = "first name field of user entity is required")
@@ -15,14 +18,10 @@ public class UserRequestDTO {
     @NotEmpty(message = "password field of user entity is required")
     private String password;
 
-    public UserRequestDTO() {
-    }
+    @NotNull(message = "Roles field is required!")
+    private Set<String> roles;
 
-    public UserRequestDTO(String firstName, String lastName, String emailAddress, String password) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.emailAddress = emailAddress;
-        this.password = password;
+    public UserRequestDTO() {
     }
 
     public @NotEmpty(message = "first name field of user entity is required") String getFirstName() {
@@ -55,5 +54,13 @@ public class UserRequestDTO {
 
     public void setPassword(@NotEmpty(message = "password field of user entity is required") String password) {
         this.password = password;
+    }
+
+    public @NotNull(message = "Roles field is required!") Set<String> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(@NotNull(message = "Roles field is required!") Set<String> roles) {
+        this.roles = roles;
     }
 }

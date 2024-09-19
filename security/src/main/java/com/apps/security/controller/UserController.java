@@ -4,6 +4,7 @@ import com.apps.security.dto.UserRequestDTO;
 import com.apps.security.dto.UserResponseDTO;
 import com.apps.security.model.User;
 import com.apps.security.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @CrossOrigin("http://localhost:4200")
-@RequestMapping(path = "/api/v1/users")
+@RequestMapping(path = "/api/v1/auth")
 public class UserController {
     private final UserService service;
 
@@ -20,15 +21,20 @@ public class UserController {
         this.service = service;
     }
 
-    @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<UserResponseDTO> createUser(@RequestBody UserRequestDTO user){
+    @RequestMapping(method = RequestMethod.POST, path = "register")
+    public ResponseEntity<UserResponseDTO> registerUser(@RequestBody UserRequestDTO user){
         UserResponseDTO responseDTO = new UserResponseDTO();
-        User newUser = service.createUser(user);
+        User newUser = service.registerUser(user);
 
         responseDTO.setItems(newUser);
         responseDTO.setStatus(newUser != null ? 200 : 400);
 
         return new ResponseEntity<>(responseDTO, newUser != null ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
+    }
+
+    @RequestMapping(method = RequestMethod.POST, path = "/login")
+    public ResponseEntity<HttpStatus> loginUser(HttpServletRequest request){
+        return service.loginUser(request);
     }
 
     @RequestMapping(method = RequestMethod.GET)
