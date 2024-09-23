@@ -8,8 +8,17 @@
             <a [routerLink]="['/login']">login</a>
         <a [routerLink]="['/register']">register</a>
         }  @else {
-            <span style="color: rgb(209, 174, 104); padding-right: 20px;">{{username}}</span>
-            <a (click)="handleLogout()">logout</a>
+            <div class="user-menu-container">
+                <span style="color: rgb(209, 174, 104); padding-right: 20px;" (click)="toggleUserMenu()">{{username}} @if(showUserMenu){<i class="fa-solid fa-chevron-up"></i>}@else {<i class="fa-solid fa-chevron-down"></i>}</span>
+                @if(showUserMenu){
+                    <div class="user-menu">
+                        <div class="menu-item"(click)="handleLogout()"><i class="icon fa-solid fa-gear"></i>settings</div>
+                        <div class="menu-item"(click)="handleLogout()"><i class="icon fa-solid fa-user"></i>profile</div>
+                        <div class="menu-item"(click)="handleLogout()"><i class="icon fa-solid fa-right-from-bracket"></i>logout</div>
+                    </div>
+                }
+            </div>
+            <!-- <a (click)="handleLogout()">logout</a> -->
         }
     </div>
 </div>

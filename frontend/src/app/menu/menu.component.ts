@@ -14,6 +14,7 @@ export class MenuComponent implements OnInit {
   
   authenticated! : boolean;
   username! : string;
+  showUserMenu : boolean = false;
 
   constructor(private dataService : DataService, private router : Router) {}
 
@@ -25,7 +26,12 @@ export class MenuComponent implements OnInit {
   handleLogout() : void {
     window.localStorage.clear();
     this.dataService.setAuthenticated(false);
+    this.showUserMenu = false;
     this.router.navigate(['/login']);
+  }
+
+  toggleUserMenu() : void {
+    this.showUserMenu = !this.showUserMenu;
   }
 
 }

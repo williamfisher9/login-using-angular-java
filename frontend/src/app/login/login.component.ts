@@ -32,8 +32,8 @@ export class LoginComponent {
   }
 
   loginForm = new FormGroup({
-    emailAddress: new FormControl(''),
-    password: new FormControl(''),
+    emailAddress: new FormControl('hamza.hamdan@hotmail.com'),
+    password: new FormControl('123$Qwert'),
   });
 
   handleRegisterForm() {
