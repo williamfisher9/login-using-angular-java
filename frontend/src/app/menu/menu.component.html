@@ -4,7 +4,12 @@
     </div>
 
     <div class="buttons">
-        <a [routerLink]="['/login']">login</a>
+        @if(!authenticated){
+            <a [routerLink]="['/login']">login</a>
         <a [routerLink]="['/register']">register</a>
+        }  @else {
+            <span style="color: rgb(209, 174, 104); padding-right: 20px;">{{username}}</span>
+            <a (click)="handleLogout()">logout</a>
+        }
     </div>
 </div>

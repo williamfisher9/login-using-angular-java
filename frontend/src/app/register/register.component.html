@@ -1,66 +1,62 @@
+@if (showLoader) {
+    <div class="loader">
+        <img src="assets/loader-icon.gif" height="300px" width="300px" alt="loader img" />
+    </div>
+}
+
 <form class="register-container" (submit)="handleRegisterForm()" [formGroup]="registerForm">
     <div class="form-fields-wrapper">
 
-        <div class="form-field">
+        <div class="{{errors.firstName.message.length > 1 ? 'form-field error-field-field' : 'form-field'}}">
             <input class="input-field" type="text" id="firstName" name="firstName" autocomplete="off" formControlName="firstName"/>
-            <label class="label-field" for="firstName">First Name</label>
+            <label class="label-field" for="firstName" [ngStyle]="{'color': errors.firstName.message.length > 1 ? 'red' : 'rgba(209, 174, 104, 0.5)'}">First Name</label>
             <label class="error-field" for="firstName">
-                @if (errors.firstName.message) {
-                    @for (item of errors.firstName.message; track $index) {
-                        {{item}}
-                    }
+                @if (errors.firstName.message != '') {
+                    {{errors.firstName.message}}
                 }
             </label>
         </div>
 
-        <div class="form-field">
+        <div class="{{errors.lastName.message.length > 1 ? 'form-field error-field-field' : 'form-field'}}">
             <input class="input-field" type="text" id="lastName" name="lastName" autocomplete="off" formControlName="lastName"/>
-            <label class="label-field" for="lastName">Last Name</label>
+            <label class="label-field" for="lastName" [ngStyle]="{'color': errors.lastName.message.length > 1 ? 'red' : 'rgba(209, 174, 104, 0.5)'}">Last Name</label>
             <label class="error-field" for="lastName">
-                @if (errors.lastName.message) {
-                    @for (item of errors.lastName.message; track $index) {
-                        {{item}}
-                    }
+                @if (errors.lastName.message != '') {
+                   {{errors.lastName.message}}
                 }
             </label>
         </div>
 
-        <div class="form-field">
+        <div class="{{errors.emailAddress.message.length > 1 ? 'form-field error-field-field' : 'form-field'}}">
             <input class="input-field" type="text" id="emailAddress" name="emailAddress" autocomplete="off" formControlName="emailAddress"/>
-            <label class="label-field" for="emailAddress">Email Address</label>
+            <label class="label-field" for="emailAddress" [ngStyle]="{'color': errors.emailAddress.message.length > 1 ? 'red' : 'rgba(209, 174, 104, 0.5)'}">Email Address</label>
             <label class="error-field" for="emailAddress">
-                @if (errors.emailAddress.message) {
-                    @for (item of errors.emailAddress.message; track $index) {
-                        {{item}}
-                    }
+                @if (errors.emailAddress.message != '') {
+                    {{errors.emailAddress.message}}
                 }
             </label>
         </div>
 
-        <div class="form-field">
+        <div class="{{errors.password.message.length > 1 ? 'form-field error-field-field' : 'form-field'}}">
             <input #passwordField class="input-field" type='{{showPassword ? "text" : "password"}}' id="password" name="password" autocomplete="off" formControlName="password"/>
-            <label class="label-field" for="password">Password</label>
+            <label class="label-field" for="password" [ngStyle]="{'color': errors.password.message.length > 1 ? 'red' : 'rgba(209, 174, 104, 0.5)'}">Password</label>
             <label class="error-field" for="password">
-                @if (errors.password.message) {
-                    @for (item of errors.password.message; track $index) {
-                        {{item}}
-                    }
+                @if (errors.password.message != '') {
+                   {{errors.password.message}}
                 }
             </label>
-            <i class="icon fa-solid {{showPassword ? 'fa-eye-slash' : 'fa-eye'}}" (click)="controlPasswordVisibility()"></i>
+            <i class="icon fa-solid {{showPassword ? 'fa-eye-slash' : 'fa-eye'}}" (click)="controlPasswordVisibility()" [ngStyle]="{'color': errors.password.message.length > 1 ? 'red' : 'rgba(209, 174, 104, 0.5)'}"></i>
         </div>
 
-        <div class="form-field">
+        <div class="{{errors.confirmPassword.message.length > 1 ? 'form-field error-field-field' : 'form-field'}}">
             <input #confirmPasswordField class="input-field" type='{{showConfirmPassword ? "text" : "password"}}' id="confirmPassword" name="confirmPassword" autocomplete="off" formControlName="confirmPassword"/>
-            <label class="label-field" for="confirmPassword">Confirm Password</label>
+            <label class="label-field" for="confirmPassword" [ngStyle]="{'color': errors.confirmPassword.message.length > 1 ? 'red' : 'rgba(209, 174, 104, 0.5)'}">Confirm Password</label>
             <label class="error-field" for="confirmPassword">
-                @if (errors.confirmPassword.message) {
-                    @for (item of errors.confirmPassword.message; track $index) {
-                        {{item}}
-                    }
+                @if (errors.confirmPassword.message != '') {
+                    {{errors.confirmPassword.message}}
                 }
             </label>
-            <i class="icon fa-solid {{showConfirmPassword ? 'fa-eye-slash' : 'fa-eye'}}" (click)="controlConfirmPasswordVisibility()"></i>
+            <i class="icon fa-solid {{showConfirmPassword ? 'fa-eye-slash' : 'fa-eye'}}" (click)="controlConfirmPasswordVisibility()" [ngStyle]="{'color': errors.confirmPassword.message.length > 1 ? 'red' : 'rgba(209, 174, 104, 0.5)'}"></i>
         </div>
 
         <input type="submit" value="submit" />

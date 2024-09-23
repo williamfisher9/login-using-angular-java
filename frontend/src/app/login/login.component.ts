@@ -2,18 +2,27 @@ import {Component, ElementRef, ViewChild} from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { User } from '../model/user';
 import { UserService } from '../services/user.service';
+import { CommonModule } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
+import { DataService } from '../services/data.service';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
 })
 export class LoginComponent {
+  
+  constructor(private service : UserService, private router : Router, private dataService : DataService) { }
+
+  showLoader : boolean = false;
+
   errors = {
-    emailAddress: { hasErrors: false, message: [''] },
-    password: { hasErrors: false, message: [''] }
+    emailAddress: { hasErrors: false, message: '' },
+    password: { hasErrors: false, message: '' }
   };
 
   showPassword : boolean = false;
@@ -29,37 +38,50 @@ export class LoginComponent {
 
   handleRegisterForm() {
     this.errors = {
-      emailAddress: { hasErrors: false, message: [''] },
-      password: { hasErrors: false, message: [''] }
+      emailAddress: { hasErrors: false, message: '' },
+      password: { hasErrors: false, message: '' }
     };
 
     let hasErrors = false;
 
-    if(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.loginForm.value.emailAddress!.trim()) === false) {
-      this.errors.emailAddress.message.push('Incorrect email address regex');
+    if(this.loginForm.value.emailAddress!.trim() == '') {
+      this.errors.emailAddress.message = 'Email address is required';
       hasErrors = true;
     }
 
-    if (/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@.#$!%*?&^])[A-Za-z\d@.#$!%*?&]{8,15}$/.test(this.loginForm.value.password!.trim()) === false) {
-      this.errors.password.message.push('Incorrect password regex');
+    if (this.loginForm.value.password!.trim() == '') {
+      this.errors.password.message = 'Password field is required';
       hasErrors = true;
     }
 
-    if(hasErrors){
-      console.log("errors exist")
-    } else {
-      console.log("send login request to the server")
+    if(!hasErrors){
+      console.log("send login request to the server");
 
-      //this.service.getUsers().subscribe(data => {this.users = data, console.log(data)});
-      this.service.authenticateUser({emailAddress: this.loginForm.value.emailAddress!, password: this.loginForm.value.password!})
+      this.showLoader = true;
+
+      this.service.authenticateUser({emailAddress: this.loginForm.value.emailAddress!, password: this.loginForm.value.password!}).subscribe(
+        {
+          next: (response) => {
+            if(response.items.authenticated){
+
+              this.router.navigate(['/personal'])
+
+              this.showLoader = false;
+            this.dataService.setAuthenticated(true);
+            console.log(response.items.principal.username);
+            this.dataService.setUsername(response.items.principal.username);
+            }
+            
+          },
+          error: (error) => {
+            this.showLoader = false;
+            console.log(error)
+          }
+        }
+      )
+      
     }
-
 
   }
-
-  users : User[] = [];
-
-  constructor(private service : UserService) { }
-
 
 }

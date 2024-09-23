@@ -1,6 +1,7 @@
 package com.apps.security.service;
 
 import com.apps.security.dto.UserRequestDTO;
+import com.apps.security.dto.UserResponseDTO;
 import com.apps.security.enums.RoleType;
 import com.apps.security.exception.AuthorizationHeaderNotFoundException;
 import com.apps.security.exception.RoleDoesNotExistException;
@@ -43,30 +44,35 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User registerUser(UserRequestDTO userRequestDTO) {
+    public UserResponseDTO registerUser(UserRequestDTO userRequestDTO) {
         Set<String> requestRoles = userRequestDTO.getRoles();
         Set<Role> userRoles = new HashSet<>();
         for(String roleName:requestRoles){
             System.out.println(roleName);
             if(RoleType.existsByName(roleName)){
-                System.out.println(1);
                 userRoles.add(new Role(RoleType.getRoleTypeByName(roleName)));
             } else {
-                System.out.println(2);
                 throw new RoleDoesNotExistException("Role " + roleName + " does not exist!");
             }
         }
 
+        UserResponseDTO responseDTO = new UserResponseDTO();
+        User createdUser = null;
+
         if(!userRoles.isEmpty()){
-            System.out.println(3);
             User user = modelMapper.map(userRequestDTO, User.class);
             user.setPassword(encoder.encode(user.getPassword()));
             user.setRoles(userRoles);
-            System.out.println(userRoles);
-            return repository.save(user);
+
+            createdUser = repository.save(user);
+            responseDTO.setItems(createdUser);
+            responseDTO.setStatus(createdUser.getId() > 0 ? HttpStatus.OK.value() : HttpStatus.EXPECTATION_FAILED.value());
+            return responseDTO;
         }
 
-        return null;
+        responseDTO.setItems(null);
+        responseDTO.setStatus(HttpStatus.EXPECTATION_FAILED.value());
+        return responseDTO;
     }
 
     @Override
@@ -86,14 +92,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseEntity<HttpStatus> loginUser(HttpServletRequest request) {
+    public UserResponseDTO loginUser(HttpServletRequest request) {
         if(request.getHeader("Authorization").isEmpty()){
             throw new AuthorizationHeaderNotFoundException("Authorization header is empty!");
         } else {
+
             String authorizationHeader = request.getHeader("Authorization")
                     .substring("Basic".length()).trim();
-            String decodedAuthorizationHeader = new String(Base64.getDecoder().decode(authorizationHeader));
 
+            System.out.println(authorizationHeader);
+            String decodedAuthorizationHeader = new String(Base64.getDecoder().decode(authorizationHeader));
+            System.out.println(decodedAuthorizationHeader);
             String[] credentials = decodedAuthorizationHeader.split(":");
 
             Authentication authentication = authenticationManager.authenticate(
@@ -102,7 +111,11 @@ public class UserServiceImpl implements UserService {
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
-            return new ResponseEntity<>(HttpStatus.OK);
+            UserResponseDTO responseDTO = new UserResponseDTO();
+            responseDTO.setItems(authentication);
+            responseDTO.setStatus(authentication.isAuthenticated() ? HttpStatus.OK.value() : HttpStatus.UNAUTHORIZED.value());
+
+            return responseDTO;
         }
     }
 }

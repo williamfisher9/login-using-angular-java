@@ -2,21 +2,23 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { UserService } from '../services/user.service';
 import { User } from '../model/user';
+import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css',
 })
 export class RegisterComponent {
   errors = {
-    firstName: { hasErrors: false, message: [''] },
-    lastName: { hasErrors: false, message: [''] },
-    emailAddress: { hasErrors: false, message: [''] },
-    password: { hasErrors: false, message: [''] },
-    confirmPassword: { hasErrors: false, message: [''] },
+    firstName: { hasErrors: false, message: '' },
+    lastName: { hasErrors: false, message: '' },
+    emailAddress: { hasErrors: false, message: '' },
+    password: { hasErrors: false, message: '' },
+    confirmPassword: { hasErrors: false, message: '' },
   };
 
   registerForm = new FormGroup({
@@ -27,13 +29,15 @@ export class RegisterComponent {
     confirmPassword: new FormControl(''),
   });
 
+  showLoader : boolean = false;
+
   handleRegisterForm() {
     this.errors = {
-      firstName: { hasErrors: false, message: [''] },
-      lastName: { hasErrors: false, message: [''] },
-      emailAddress: { hasErrors: false, message: [''] },
-      password: { hasErrors: false, message: [''] },
-      confirmPassword: { hasErrors: false, message: [''] },
+      firstName: { hasErrors: false, message: '' },
+    lastName: { hasErrors: false, message: '' },
+    emailAddress: { hasErrors: false, message: '' },
+    password: { hasErrors: false, message: '' },
+    confirmPassword: { hasErrors: false, message: '' },
     };
 
     let hasErrors = false;
@@ -42,7 +46,7 @@ export class RegisterComponent {
       /^([a-zA-Z]){3,8}$/.test(this.registerForm.value.firstName!.trim()) ===
       false
     ) {
-      this.errors.firstName.message.push('Incorrect first name regex');
+      this.errors.firstName.message = 'Incorrect first name regex';
       hasErrors = true;
     }
 
@@ -50,7 +54,7 @@ export class RegisterComponent {
       /^([a-zA-Z]){3,8}$/.test(this.registerForm.value.lastName!.trim()) ===
       false
     ) {
-      this.errors.lastName.message.push('Incorrect last name regex');
+      this.errors.lastName.message = 'Incorrect last name regex';
       hasErrors = true;
     }
 
@@ -59,7 +63,7 @@ export class RegisterComponent {
         this.registerForm.value.emailAddress!.trim()
       ) === false
     ) {
-      this.errors.emailAddress.message.push('Incorrect email address regex');
+      this.errors.emailAddress.message = 'Incorrect email address regex';
       hasErrors = true;
     }
 
@@ -68,23 +72,28 @@ export class RegisterComponent {
         this.registerForm.value.password!.trim()
       ) === false
     ) {
-      this.errors.password.message.push('Incorrect password regex');
+      this.errors.password.message = 'Incorrect password regex';
       hasErrors = true;
     }
 
-    if (
-      this.registerForm.value.password!.trim() !==
-      this.registerForm.value.confirmPassword!.trim()
-    ) {
-      this.errors.confirmPassword.message.push('Passwords do not match');
+    if (this.registerForm.value.password!.trim() == '' && this.registerForm.value.confirmPassword!.trim() == '') {
+      this.errors.confirmPassword.message = 'This field is required';
       hasErrors = true;
     }
+
+    if (this.registerForm.value.password!.trim() !== this.registerForm.value.confirmPassword!.trim()) {
+      this.errors.confirmPassword.message = 'Passwords do not match';
+      hasErrors = true;
+    }
+
 
     if (hasErrors) {
       console.log('errors exist');
     } else {
       console.log('send request to the server');
 
+      this.showLoader = true;
+      
       this.service
         .createUser(
           new User(
@@ -92,24 +101,29 @@ export class RegisterComponent {
             this.registerForm.value.firstName!,
             this.registerForm.value.lastName!,
             this.registerForm.value.emailAddress!,
-            this.registerForm.value.password!
+            this.registerForm.value.password!,
+            ['USER_ROLE']
           )
         )
         .subscribe({
           next: (data) => {
             console.log(data);
+            this.router.navigate(["/login"]);
+            this.showLoader = false;
           },
           error: (error) => {
             console.log(error);
             this.errorReceived = true;
-          },
+            this.router.navigate(["/register"]);
+            this.showLoader = false;
+          }
         });
     }
   }
 
   errorReceived : boolean = false;
 
-  constructor(private service: UserService) {}
+  constructor(private service: UserService, private router : Router) {}
 
   showPassword: boolean = false;
   showConfirmPassword: boolean = false;
