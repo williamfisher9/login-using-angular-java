@@ -1,20 +1,20 @@
 <div class="menu-container">
     <div class="logo">
-        <img src="assets/logo.jpg" height="70px" alt="logo img" [routerLink]="['/']"/>
+        <img src="assets/logo.jpg" height="55px" alt="logo img" [routerLink]="['/']"/>
     </div>
 
     <div class="buttons">
         @if(!authenticated){
             <a [routerLink]="['/login']">login</a>
-        <a [routerLink]="['/register']">register</a>
+            <a [routerLink]="['/register']">register</a>
         }  @else {
             <div class="user-menu-container">
-                <span style="color: rgb(209, 174, 104); padding-right: 20px;" (click)="toggleUserMenu()">{{username}} @if(showUserMenu){<i class="fa-solid fa-chevron-up"></i>}@else {<i class="fa-solid fa-chevron-down"></i>}</span>
+                <span style="color: rgb(209, 174, 104); padding-right: 20px;" (click)="toggleUserMenu()"><span style="text-transform: capitalize;">{{username}} </span> @if(showUserMenu){<i class="fa-solid fa-chevron-up"></i>}@else {<i class="fa-solid fa-chevron-down"></i>}</span>
                 @if(showUserMenu){
                     <div class="user-menu">
-                        <div class="menu-item"(click)="handleLogout()"><i class="icon fa-solid fa-gear"></i>settings</div>
-                        <div class="menu-item"(click)="handleLogout()"><i class="icon fa-solid fa-user"></i>profile</div>
-                        <div class="menu-item"(click)="handleLogout()"><i class="icon fa-solid fa-right-from-bracket"></i>logout</div>
+                        <div class="menu-item"><i class="icon fa-solid fa-gear"></i>settings</div>
+                        <div class="menu-item" (click)="handleProfileClick()" [routerLink]="['/profile']"><i class="icon fa-solid fa-user"></i>profile</div>
+                        <div class="menu-item" (click)="handleLogout()"><i class="icon fa-solid fa-right-from-bracket"></i>logout</div>
                     </div>
                 }
             </div>

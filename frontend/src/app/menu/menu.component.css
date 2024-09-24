@@ -1,6 +1,6 @@
 .menu-container {
     width: 100%;
-    height: 75px;
+    height: 60px;
     background-color: #010101;
     position: fixed;
     top: 0;
@@ -26,9 +26,10 @@
     text-transform: uppercase;
     border: 1px solid rgb(209, 174, 104);
     margin-right: 10px;
-    padding: 7px 15px;
+    padding: 7px 20px;
     border-radius: 10px;
     font-weight: 500;
+    font-size: 1rem;
 }
 
 .buttons a:hover {
@@ -45,21 +46,22 @@
     position: relative;
     cursor: pointer;
     transition: 0.3s;
+    
 }
 
 .user-menu {
     position: absolute;
-    background-color: #010101;
-    width: 150px;
-    top: 48px;
-    left: 0;
-    border-left: 3px solid rgb(209, 174, 104);
+    background-color: rgb(209, 174, 104);
+    width: 200px;
+    top: 42px;
+    right: 0;
+    z-index: 21;
 }
 
 .menu-item {
     width: 100%;
     height: 40px;
-    color: rgb(209, 174, 104);
+    color: #010101;
     cursor: pointer;
     text-transform: uppercase;
     padding: 25px 10%;
@@ -68,11 +70,10 @@
 }
 
 .menu-item:hover {
-    background-color: rgb(209, 174, 104);
-    color: #000;
+    background-color: #010101 ;
+    color: rgb(209, 174, 104);
 }
 
 .icon {
     padding-right: 10px;
 }
-

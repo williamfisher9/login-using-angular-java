@@ -59,6 +59,28 @@
             <i class="icon fa-solid {{showConfirmPassword ? 'fa-eye-slash' : 'fa-eye'}}" (click)="controlConfirmPasswordVisibility()" [ngStyle]="{'color': errors.confirmPassword.message.length > 1 ? 'red' : 'rgba(209, 174, 104, 0.5)'}"></i>
         </div>
 
+
+
+
+
+        <div class="{{errors.firstName.message.length > 1 ? 'form-field error-field-field' : 'form-field'}}">
+            <input #profileImageField class="input-field" type='file' id="confirmPassword" name="confirmPassword" autocomplete="off" formControlName="confirmPassword"/>
+            <label class="label-field" for="confirmPassword" [ngStyle]="{'color': errors.confirmPassword.message.length > 1 ? 'red' : 'rgba(209, 174, 104, 0.5)'}">Confirm Password</label>
+            <label class="error-field" for="confirmPassword">
+                @if (errors.confirmPassword.message != '') {
+                    {{errors.confirmPassword.message}}
+                }
+            </label>
+            <i class="icon fa-solid {{showConfirmPassword ? 'fa-eye-slash' : 'fa-eye'}}" (click)="controlConfirmPasswordVisibility()" [ngStyle]="{'color': errors.confirmPassword.message.length > 1 ? 'red' : 'rgba(209, 174, 104, 0.5)'}"></i>
+        </div>
+
+
+
+
+
+
+
+
         <input type="submit" value="submit" />
 
         <label class="error-field" for="confirmPassword">

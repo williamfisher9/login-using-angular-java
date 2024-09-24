@@ -62,14 +62,15 @@ export class LoginComponent {
       this.service.authenticateUser({emailAddress: this.loginForm.value.emailAddress!, password: this.loginForm.value.password!}).subscribe(
         {
           next: (response) => {
+            console.log(response.items)
             if(response.items.authenticated){
 
               this.router.navigate(['/personal'])
 
               this.showLoader = false;
             this.dataService.setAuthenticated(true);
-            console.log(response.items.principal.username);
-            this.dataService.setUsername(response.items.principal.username);
+            console.log(response.items);
+            this.dataService.setUsername(response.items.name);
             }
             
           },

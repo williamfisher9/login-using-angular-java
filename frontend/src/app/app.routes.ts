@@ -3,6 +3,7 @@ import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { PublicComponent } from './public/public.component';
 import { PersonalComponent } from './personal/personal.component';
+import { ProfileComponent } from './profile/profile.component';
 
 export const routes: Routes = [
     {path: "", component: LoginComponent},
@@ -10,4 +11,5 @@ export const routes: Routes = [
     {path: "register", component: RegisterComponent},
     {path: "public", component: PublicComponent},
     {path: "personal", component: PersonalComponent},
+    {path: "profile", component: ProfileComponent},
 ];

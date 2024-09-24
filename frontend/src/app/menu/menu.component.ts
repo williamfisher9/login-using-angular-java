@@ -34,4 +34,8 @@ export class MenuComponent implements OnInit {
     this.showUserMenu = !this.showUserMenu;
   }
 
+  handleProfileClick() : void {
+    this.showUserMenu = false;
+  }
+
 }

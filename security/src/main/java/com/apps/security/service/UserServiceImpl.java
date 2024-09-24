@@ -1,5 +1,6 @@
 package com.apps.security.service;
 
+import com.apps.security.dto.AuthenticatedUserDTO;
 import com.apps.security.dto.UserRequestDTO;
 import com.apps.security.dto.UserResponseDTO;
 import com.apps.security.enums.RoleType;
@@ -15,15 +16,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.util.Base64;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 @Component
 public class UserServiceImpl implements UserService {
@@ -63,6 +63,13 @@ public class UserServiceImpl implements UserService {
             createdUser = repository.save(user);
             responseDTO.setItems(createdUser);
             responseDTO.setStatus(createdUser.getId() > 0 ? HttpStatus.OK.value() : HttpStatus.EXPECTATION_FAILED.value());
+
+            try {
+                TimeUnit.SECONDS.sleep(1);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+
             return responseDTO;
         }
 
@@ -106,8 +113,21 @@ public class UserServiceImpl implements UserService {
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
             UserResponseDTO responseDTO = new UserResponseDTO();
-            responseDTO.setItems(authentication);
+
+            AuthenticatedUserDTO authenticatedUserDTO = new AuthenticatedUserDTO();
+            authenticatedUserDTO.setUsername(authentication.getName());
+            authenticatedUserDTO.setAuthenticated(authentication.isAuthenticated());
+            authenticatedUserDTO.setRoles((Collection<GrantedAuthority>) authentication.getAuthorities());
+            authenticatedUserDTO.setName(repository.findByEmailAddress(authentication.getName()).get().getFirstName());
+
+            responseDTO.setItems(authenticatedUserDTO);
             responseDTO.setStatus(authentication.isAuthenticated() ? HttpStatus.OK.value() : HttpStatus.UNAUTHORIZED.value());
+
+            try {
+                TimeUnit.SECONDS.sleep(1);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
 
             return responseDTO;
         }
