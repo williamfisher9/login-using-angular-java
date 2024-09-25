@@ -3,10 +3,12 @@ package com.apps.security.controller;
 import com.apps.security.dto.UserRequestDTO;
 import com.apps.security.dto.UserResponseDTO;
 import com.apps.security.service.UserService;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

@@ -13,6 +13,8 @@ import { Router } from '@angular/router';
   styleUrl: './register.component.css',
 })
 export class RegisterComponent {
+  file! : File | null;
+
   errors = {
     firstName: { hasErrors: false, message: '' },
     lastName: { hasErrors: false, message: '' },
@@ -22,11 +24,12 @@ export class RegisterComponent {
   };
 
   registerForm = new FormGroup({
-    firstName: new FormControl(''),
-    lastName: new FormControl(''),
-    emailAddress: new FormControl(''),
-    password: new FormControl(''),
-    confirmPassword: new FormControl(''),
+    firstName: new FormControl('hamza'),
+    lastName: new FormControl('hamdan'),
+    emailAddress: new FormControl('hamza.hamdan' + Math.floor((Math.random() * 1000000) + 1) + '@hotmail.com'),
+    password: new FormControl('123$Qwert'),
+    confirmPassword: new FormControl('123$Qwert'),
+    profilePicture: new FormControl(this.file)
   });
 
   showLoader : boolean = false;
@@ -34,10 +37,10 @@ export class RegisterComponent {
   handleRegisterForm() {
     this.errors = {
       firstName: { hasErrors: false, message: '' },
-    lastName: { hasErrors: false, message: '' },
-    emailAddress: { hasErrors: false, message: '' },
-    password: { hasErrors: false, message: '' },
-    confirmPassword: { hasErrors: false, message: '' },
+      lastName: { hasErrors: false, message: '' },
+      emailAddress: { hasErrors: false, message: '' },
+      password: { hasErrors: false, message: '' },
+      confirmPassword: { hasErrors: false, message: '' },
     };
 
     let hasErrors = false;
@@ -102,7 +105,8 @@ export class RegisterComponent {
             this.registerForm.value.lastName!,
             this.registerForm.value.emailAddress!,
             this.registerForm.value.password!,
-            ['USER_ROLE']
+            ['USER_ROLE'],
+            this.registerForm.value.profilePicture!
           )
         )
         .subscribe({
@@ -134,5 +138,12 @@ export class RegisterComponent {
 
   controlConfirmPasswordVisibility() {
     this.showConfirmPassword = !this.showConfirmPassword;
+  }
+
+  onFileChange(e : any) {
+    if(e.target.files){
+      this.file = e.target.files[0];
+      console.log(this.registerForm.value.profilePicture)
+    }
   }
 }
