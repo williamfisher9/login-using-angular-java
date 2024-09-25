@@ -7,6 +7,14 @@
 <form class="login-container" (submit)="handleRegisterForm()" [formGroup]="loginForm">
     <div class="form-fields-wrapper">
 
+        <label class="login-error" style="color: red;">
+            @if (errorReceived) {
+                ERROR: Invalid Username/Password
+            } @else {
+                
+            }
+        </label>
+
         <div class="{{errors.emailAddress.message.length > 1 ? 'error-field-field' : 'form-field'}}">
             <input class="input-field" type="text" id="emailAddress" name="emailAddress" autocomplete="off" formControlName="emailAddress"/>
             <label class="label-field" for="emailAddress" [ngStyle]="{'color': errors.emailAddress.message.length > 1 ? 'red' : 'rgba(209, 174, 104, 0.5)'}">Email Address</label>
